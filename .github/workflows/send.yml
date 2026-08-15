@@ -2,6 +2,7 @@ name: Send Telegram Message
 
 on:
   workflow_dispatch:
+
   schedule:
     - cron: '55 7 * * 1-5'
 
