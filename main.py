@@ -17,32 +17,34 @@ try:
 
     for stock in movers:
 
-        ticker = stock.get("ticker", "")
+        ticker = stock.get("ticker", "").upper()
         volume = stock.get("day", {}).get("v", 0)
         price = stock.get("day", {}).get("c", 0)
 
         if (
             volume > 500000
             and price > 1
-            and not ticker.endswith("W")
-            and not ticker.endswith("R")
-            and not ticker.endswith("U")
+            and len(ticker) <= 5
         ):
             filtered.append(stock)
 
-    message = "🚀 MJ Morning Scanner\n\n"
+    message = "🚀 MJ Morning Scanner V2\n\n"
 
-    for i, stock in enumerate(filtered[:10], start=1):
+    if len(filtered) == 0:
+        message += "No qualifying movers found."
+    else:
 
-        ticker = stock.get("ticker", "N/A")
-        change = stock.get("todaysChangePerc", 0)
-        volume = stock.get("day", {}).get("v", 0)
+        for i, stock in enumerate(filtered[:10], start=1):
 
-        message += (
-            f"{i}. {ticker}\n"
-            f"Change: {change:.2f}%\n"
-            f"Volume: {volume:,.0f}\n\n"
-        )
+            ticker = stock.get("ticker", "N/A")
+            change = stock.get("todaysChangePerc", 0)
+            volume = stock.get("day", {}).get("v", 0)
+
+            message += (
+                f"{i}. {ticker}\n"
+                f"🚀 +{change:.1f}%\n"
+                f"📊 Vol {volume:,.0f}\n\n"
+            )
 
 except Exception as e:
     message = f"❌ Error\n\n{str(e)}"
