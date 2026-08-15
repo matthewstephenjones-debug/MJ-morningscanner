@@ -3,8 +3,17 @@ import requests
 
 BOT_TOKEN = os.environ["TELEGRAM_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
+API_KEY = os.environ["POLYGON_API_KEY"]
 
-message = "✅ Finnhub key loaded successfully"
+url = f"https://api.polygon.io/v3/reference/tickers/AAPL?apiKey={API_KEY}"
+
+try:
+    r = requests.get(url)
+    data = r.json()
+
+    message = f"✅ Massive connected\n\n{str(data)[:3000]}"
+except Exception as e:
+    message = f"❌ Error: {e}"
 
 requests.post(
     f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
